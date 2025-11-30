@@ -57,6 +57,14 @@
         all: unset;
         width: 1.3rem;
         height: 1.3rem;
+        opacity: var(--t-opacity-B);
+
+        transition: all 100ms;
+    }
+
+    .pin-button:hover,
+    .pin-button:active {
+        opacity: 1;
     }
 
     :global(.pin-button .sprite svg) {
