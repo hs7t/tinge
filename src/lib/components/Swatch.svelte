@@ -75,4 +75,16 @@
         display: flex;
         flex-direction: column;
     }
+
+    .swatch .info .text.name {
+        font-weight: 600;
+    }
+
+    .swatch .info .text.reference {
+        opacity: var(--t-opacity-B);
+    }
+
+    .swatch .info .text.reference:hover {
+        opacity: 1;
+    }
 </style>
