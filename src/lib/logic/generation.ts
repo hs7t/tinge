@@ -103,8 +103,6 @@ export const getLightnessShifts = (
     return palette
 }
 
-
-
 /*
     NOTES
     chroma = intensity of the colour
