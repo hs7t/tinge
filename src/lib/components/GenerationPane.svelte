@@ -24,5 +24,6 @@
         color: var(--t-color-theme-B);
         font-feature-settings: 'wdth' 70;
         border-radius: var(--t-border-radius-A);
+        text-transform: uppercase;
     }
 </style>

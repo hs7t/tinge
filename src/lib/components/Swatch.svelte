@@ -79,11 +79,12 @@
     }
 
     .swatch .info .text.name {
-        font-weight: 600;
+        font-weight: 500;
     }
 
     .swatch .info .text.reference {
         opacity: var(--t-opacity-B);
+        font-size: var(--t-font-size-B);
     }
 
     .swatch .info .text.reference:hover {
