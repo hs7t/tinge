@@ -6,13 +6,6 @@ export type SwatchData = {
     locked: boolean
 }
 
-class AppState {
-    palette: SwatchData[] = []
-    generationProperties = {
-        colorAmount: 5
-    }
-}
-
 class AppEvents extends EventTarget {}
 
 class GenerationEvent extends Event {
@@ -23,7 +16,14 @@ class GenerationEvent extends Event {
     }
 }
 
-export const currentState = $state(new AppState)
+
+export const currentState = $state({
+    palette: [] as SwatchData[],
+    generationProperties: {
+        colorAmount: 5
+    }
+})
+
 export const appEvents = new AppEvents()
 
 export const refreshPalette = () => {
@@ -37,8 +37,8 @@ export const refreshPalette = () => {
             locked: false,
         })
     }
-    
-    appEvents.dispatchEvent(new GenerationEvent)
+
+    appEvents.dispatchEvent(new GenerationEvent())
 }
 
 refreshPalette()
