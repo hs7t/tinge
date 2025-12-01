@@ -98,8 +98,8 @@ export const getShiftPalette = (
     return palette
 }
 
-export const getRandomBaseColour = () => {
-    return randomColor({ luminosity: 'random' })
+export const getRandomBaseColour = (): chroma.Color => {
+    return chroma(randomColor({ luminosity: 'random' }))
 }
 
 export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
