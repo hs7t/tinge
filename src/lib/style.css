@@ -35,4 +35,8 @@ body {
 
     background-color: var(--t-color-background-A);
     color: var(--t-color-primary);
+
+    max-width: 100dvw;
+    max-height: 100dvh;
+    overflow: hidden;
 }
