@@ -2,6 +2,7 @@ import chroma from 'chroma-js'
 
 const MAX_HUE = 360
 const MAX_LIGHTNESS = 1
+const MAX_CHROMA = 0.4 // this is not the most you can have but screens and all
 
 export const getComplementaryColors = (
     baseColour: chroma.Color,
@@ -74,6 +75,28 @@ export const getLightnessShifts = (
     return palette
 }
 
+export const getChromaShifts = (
+    baseColour: chroma.Color,
+    changePerShift: number, // percentage of max okclh shift
+    shiftQuantity: number,
+    startingPoint: number = 0, // moves the base chroma by changePerShift * n
+) => {
+    const [baseLightness, baseChroma, baseHue] = baseColour.oklch()
+
+    const chromaUnits = (changePerShift * MAX_CHROMA) / 100
+
+    const chromaModifier = chromaUnits * startingPoint
+    const workingChroma = (baseChroma + chromaModifier) % MAX_CHROMA
+
+    const palette: Array<chroma.Color> = []
+    for (let i = 0; i < shiftQuantity; i++) {
+        const calculatedChroma = (workingChroma + chromaUnits * i) % MAX_CHROMA
+        palette.push(chroma(baseLightness, calculatedChroma, baseHue, 'oklch'))
+    }
+
+    return palette
+}
+
 export const getRandomBaseColour = () => {
     return chroma.random()
 }
@@ -88,6 +111,9 @@ export const getRandomPalette = (colorAmount = 4) => {
         },
         () => {
             return getHueShifts(baseColour, changePerShift, colorAmount)
+        },
+        () => {
+            return getChromaShifts(baseColour, changePerShift, colorAmount)
         },
         () => {
             return getComplementaryColors(baseColour, colorAmount)
