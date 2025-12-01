@@ -53,19 +53,21 @@ export const getHueShifts = (
 
 export const getLightnessShifts = (
     baseColour: chroma.Color,
-    changePerShift: number,
+    changePerShift: number, // percentage of max okclh shift
     shiftQuantity: number,
     startingPoint: number = 0, // moves the base lightness by changePerShift * n
 ) => {
     const [baseLightness, baseChroma, baseHue] = baseColour.oklch()
 
-    const ligthnessModifier = changePerShift * startingPoint
+    const lightnessUnits = (changePerShift * MAX_LIGHTNESS) / 100
+
+    const ligthnessModifier = lightnessUnits * startingPoint
     const workingLightness = (baseLightness + ligthnessModifier) % MAX_LIGHTNESS
 
     const palette: Array<chroma.Color> = []
     for (let i = 0; i < shiftQuantity; i++) {
         const calculatedLightness =
-            (workingLightness + changePerShift * i) % MAX_LIGHTNESS
+            (workingLightness + lightnessUnits * i) % MAX_LIGHTNESS
         palette.push(chroma(calculatedLightness, baseChroma, baseHue, 'oklch'))
     }
 
@@ -89,7 +91,7 @@ export const getRandomPalette = (colorAmount = 4) => {
         },
         () => {
             return getComplementaryColors(baseColour, colorAmount)
-        }
+        },
     ]
 
     const selection = options[Math.floor(Math.random() * options.length)]
