@@ -1,5 +1,7 @@
 import chroma from 'chroma-js'
 
+type OKLCHProperty = 'lightness' | 'chroma' | 'hue'
+
 const MAX_HUE = 360
 const MAX_LIGHTNESS = 1
 const MAX_CHROMA = 0.4 // this is not the most you can have but screens and all
@@ -34,18 +36,20 @@ export const getComplementaryColors = (
 
 export const getHueShifts = (
     baseColour: chroma.Color,
-    changePerShift: number,
+    changePerShift: number, // percentage of max oklch shift
     shiftQuantity: number,
     startingPoint: number = 0, // moves the base hue by changePerShift * n
 ) => {
     const [baseLightness, baseChroma, baseHue] = baseColour.oklch()
 
-    const hueModifier = changePerShift * startingPoint
+    const hueUnits = (changePerShift * MAX_HUE) / 100
+
+    const hueModifier = hueUnits * startingPoint
     const workingHue = (baseHue + hueModifier) % MAX_HUE
 
     const palette: Array<chroma.Color> = []
     for (let i = 0; i < shiftQuantity; i++) {
-        const calculatedHue = (workingHue + changePerShift * i) % MAX_HUE
+        const calculatedHue = (workingHue + hueUnits * i) % MAX_HUE
         palette.push(chroma(baseLightness, baseChroma, calculatedHue, 'oklch'))
     }
 
@@ -54,7 +58,7 @@ export const getHueShifts = (
 
 export const getLightnessShifts = (
     baseColour: chroma.Color,
-    changePerShift: number, // percentage of max okclh shift
+    changePerShift: number, // percentage of max oklch shift
     shiftQuantity: number,
     startingPoint: number = 0, // moves the base lightness by changePerShift * n
 ) => {
@@ -77,7 +81,7 @@ export const getLightnessShifts = (
 
 export const getChromaShifts = (
     baseColour: chroma.Color,
-    changePerShift: number, // percentage of max okclh shift
+    changePerShift: number, // percentage of max oklch shift
     shiftQuantity: number,
     startingPoint: number = 0, // moves the base chroma by changePerShift * n
 ) => {
@@ -103,7 +107,13 @@ export const getRandomBaseColour = () => {
 
 export const getRandomPalette = (colorAmount = 4) => {
     const baseColour = getRandomBaseColour()
-    const changePerShift = 30
+
+    const maxChangePerShift = 40
+    const minChangePerShift = 10
+    const changePerShift = Math.floor(
+        Math.random() * (maxChangePerShift - minChangePerShift) +
+            minChangePerShift,
+    )
 
     const options = [
         () => {
