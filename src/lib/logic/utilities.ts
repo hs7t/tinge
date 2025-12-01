@@ -8,7 +8,7 @@ export const chooseBestContrastingForColour = (
     const contrastA = chroma.contrast(colour, optionA)
     const contrastB = chroma.contrast(colour, optionB)
 
-    return contrastA == contrastB ? optionA : optionB
+    return contrastA > contrastB ? optionA : optionB
 }
 
 export const getCSSPropertyValue = (
