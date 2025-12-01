@@ -36,7 +36,7 @@
 
     let { active = $bindable(false) } = $props()
     let currentSprite: string = $derived(
-        active ? pinButtonDefaultSVG : pinButtonFilledSVG,
+        active ? pinButtonFilledSVG : pinButtonDefaultSVG,
     )
 </script>
 
@@ -55,9 +55,23 @@
 <style>
     .pin-button {
         all: unset;
+        width: 1.3rem;
+        height: 1.3rem;
+        opacity: var(--t-opacity-B);
+
+        transition: all 100ms;
     }
 
-    .pin-button .sprite {
-        color: red;
+    .pin-button:hover,
+    .pin-button:active {
+        opacity: 1;
+    }
+
+    :global(.pin-button .sprite svg) {
+        color: inherit;
+        width: 100%;
+        height: 100%;
+
+        aspect-ratio: 1 / 1;
     }
 </style>

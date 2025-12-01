@@ -1,0 +1,42 @@
+:root {
+    --t-font-family-primary: 'Google Sans Flex', sans-serif;
+
+    --t-font-size-A: 1.2rem;
+    --t-font-size-B: 0.9rem;
+
+    --t-color-primary: #222222;
+    --t-color-background-A: #f4f4f4;
+
+    --t-color-contrast-A: #222222;
+    --t-color-contrast-B: #ffffff;
+
+    --t-opacity-B: 80%;
+
+    --t-border-radius-A: 20pt;
+
+    /* Theme colours, to be changed programatically */
+    --t-color-theme-A: #083d77;
+    --t-color-theme-B: #f4d35e;
+    --t-color-theme-A-contrast: var(--t-color-contrast-B);
+    --t-color-theme-B-contrast: var(--t-color-contrast-A);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--t-font-family-primary);
+    font-variation-settings: 'wdth' 90;
+    font-size: var(--t-font-size-A);
+
+    background-color: var(--t-color-background-A);
+    color: var(--t-color-primary);
+
+    max-width: 100dvw;
+    max-height: 100dvh;
+    overflow: hidden;
+}
