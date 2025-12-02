@@ -32,17 +32,22 @@ export const refreshPalette = async () => {
         currentState.generationProperties.colorAmount,
     )
 
-    const newPalette: Array<SwatchData> = []
+    const workingPalette: Array<SwatchData> = currentState.palette
 
     const colourNames = await getNamesForColours(generatedColours)
+
     for (let i = 0; i < generatedColours.length; i++) {
-        newPalette.push({
+        if (workingPalette[i] && workingPalette[i]?.locked) {
+            continue
+        }
+
+        workingPalette[i] = {
             name: colourNames[i],
             colour: generatedColours[i],
             locked: false,
-        })
+        }
     }
 
-    currentState.palette = [...newPalette]
+    currentState.palette = [...workingPalette]
     appEvents.dispatchEvent(new GenerationEvent())
 }
