@@ -6,10 +6,6 @@
 </nav>
 
 <style>
-    button {
-        all: unset;
-    }
-
     nav {
         display: flex;
         flex-direction: row;
@@ -17,6 +13,8 @@
     }
 
     .section {
+        --color-best-contrasting: var(--t-color-theme-A-contrast);
+
         display: flex;
         padding: 0.8ch;
 
@@ -24,7 +22,7 @@
         border-radius: 100pt;
 
         background-color: var(--t-color-theme-A);
-        color: var(--t-color-theme-A-contrast);
+        color: var(--color-best-contrasting);
 
         text-transform: uppercase;
     }
@@ -34,7 +32,11 @@
     }
 
     button.section {
+        --color-best-contrasting: var(--t-color-theme-B-contrast);
+
         background-color: var(--t-color-theme-B);
-        color: var(--t-color-theme-B-contrast);
+        color: var(--color-best-contrasting);
+
+        outline-offset: 0;
     }
 </style>

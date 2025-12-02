@@ -21,9 +21,11 @@
     }
 
     button {
+        --color-best-contrasting: var(--t-color-theme-B-contrast);
+
         padding: 0.8ch;
         font-size: 3rem;
-        background-color: var(--t-color-theme-B-contrast);
+        background-color: var(--color-best-contrasting);
         color: var(--t-color-theme-B);
         font-feature-settings: 'wdth' 70;
         border-radius: var(--t-border-radius-A);
