@@ -141,9 +141,9 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
 
             if (chosenProperty == 'hue') {
                 // trust me bro
-                changePerShift /= Math.floor(Math.random() * 3 + 1)
+                changePerShift /= Math.floor(Math.random() * 3 - 1)
             } else if (chosenProperty == 'chroma') {
-                changePerShift /= Math.floor(Math.random() * 2 + 1)
+                changePerShift /= Math.floor(Math.random() * 2 - 1)
             }
 
             return getShiftPalette(
@@ -160,7 +160,8 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
 
     if (
         colorAmount > 1 &&
-        chroma.deltaE(palette[0], palette[palette.length - 1]) < 2
+        (chroma.deltaE(palette[0], chroma.average(palette)) < 3 ||
+            chroma.deltaE(palette[0], palette[palette.length - 1]) < 2)
     ) {
         return getRandomPalette(colorAmount)
     }
