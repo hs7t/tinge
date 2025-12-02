@@ -70,7 +70,7 @@
 <style>
     .swatch {
         border-radius: var(--t-border-radius-A);
-        padding: 2ch;
+        padding: 4%;
 
         color: var(--color-best-contrasting);
         background-color: var(--swatch-color);

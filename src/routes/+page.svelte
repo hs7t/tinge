@@ -92,11 +92,13 @@
         flex-direction: row;
 
         flex: 1;
+        min-height: 0;
     }
 
     main .part {
         display: flex;
         flex-direction: column;
         flex: 1;
+        max-height: 100%;
     }
 </style>
