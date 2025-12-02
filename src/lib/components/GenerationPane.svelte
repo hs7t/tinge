@@ -39,7 +39,7 @@
     }
 
     button:active {
-        transform: perspective(20pt);
+        transform: scale(0.98);
         opacity: 1;
     }
 </style>
