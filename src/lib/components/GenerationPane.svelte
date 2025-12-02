@@ -21,7 +21,6 @@
     }
 
     button {
-        all: unset;
         padding: 0.8ch;
         font-size: 3rem;
         background-color: var(--t-color-theme-B-contrast);

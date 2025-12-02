@@ -94,8 +94,6 @@
     }
 
     .swatch .info button.reference {
-        all: unset;
-
         padding: 0.3ch;
         margin: -0.3ch;
         font-size: var(--t-font-size-B);
