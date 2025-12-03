@@ -3,7 +3,7 @@
 
     import chroma from 'chroma-js'
     import {
-        chooseBestContrastingForColour,
+        chooseBestContrastingForColor,
         getCSSPropertyValue,
     } from '$lib/logic/utilities'
 
@@ -19,8 +19,8 @@
         if (!element) return
 
         const constrastFallBack = '#000000'
-        contrastingColor = chooseBestContrastingForColour(
-            swatchData.colour,
+        contrastingColor = chooseBestContrastingForColor(
+            swatchData.color,
             chroma(
                 getCSSPropertyValue(
                     '--t-color-contrast-A',
@@ -42,7 +42,7 @@
 <div
     class="swatch"
     bind:this={element}
-    style:--swatch-color={swatchData.colour.hex()}
+    style:--swatch-color={swatchData.color.hex()}
     style:--color-best-contrasting={contrastingColor}
 >
     <div class="info">
@@ -51,13 +51,13 @@
         </span>
         <button
             class="reference"
-            aria-label="Copy colour {swatchData.colour.hex()}"
-            title="Copy colour"
+            aria-label="Copy color {swatchData.color.hex()}"
+            title="Copy color"
             onclick={() => {
-                navigator.clipboard.writeText(swatchData.colour.hex())
+                navigator.clipboard.writeText(swatchData.color.hex())
             }}
         >
-            {swatchData.colour.hex()}
+            {swatchData.color.hex()}
         </button>
     </div>
     <PinButton

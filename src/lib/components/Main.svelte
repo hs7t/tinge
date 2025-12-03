@@ -3,7 +3,7 @@
     import NavBar from '$lib/components/NavBar.svelte'
     import SwatchView from '$lib/components/SwatchView.svelte'
     import {
-        chooseBestContrastingForColour,
+        chooseBestContrastingForColor,
         getCSSPropertyValue,
     } from '$lib/logic/utilities'
 
@@ -16,43 +16,43 @@
     const updateTheming = () => {
         if (!currentState.palette || currentState.palette.length < 2) return
 
-        const fallbackColour = '#000000'
+        const fallbackColor = '#000000'
 
-        const colourA = currentState.palette[0].colour
-        const colourB = currentState.palette[1].colour
+        const colorA = currentState.palette[0].color
+        const colorB = currentState.palette[1].color
 
-        const contrastColourA = chroma(
+        const contrastColorA = chroma(
             getCSSPropertyValue(
                 '--t-color-contrast-A',
                 mainElement,
-                fallbackColour,
+                fallbackColor,
             ),
         )
-        const contrastColourB = chroma(
+        const contrastColorB = chroma(
             getCSSPropertyValue(
                 '--t-color-contrast-B',
                 mainElement,
-                fallbackColour,
+                fallbackColor,
             ),
         )
 
-        mainElement.style.setProperty('--t-color-theme-A', colourA.css())
-        mainElement.style.setProperty('--t-color-theme-B', colourB.css())
+        mainElement.style.setProperty('--t-color-theme-A', colorA.css())
+        mainElement.style.setProperty('--t-color-theme-B', colorB.css())
 
         mainElement.style.setProperty(
             '--t-color-theme-A-contrast',
-            chooseBestContrastingForColour(
-                colourA,
-                contrastColourA,
-                contrastColourB,
+            chooseBestContrastingForColor(
+                colorA,
+                contrastColorA,
+                contrastColorB,
             ).css(),
         )
         mainElement.style.setProperty(
             '--t-color-theme-B-contrast',
-            chooseBestContrastingForColour(
-                colourB,
-                contrastColourA,
-                contrastColourB,
+            chooseBestContrastingForColor(
+                colorB,
+                contrastColorA,
+                contrastColorB,
             ).css(),
         )
     }

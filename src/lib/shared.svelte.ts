@@ -1,10 +1,10 @@
 import { getRandomPalette } from './logic/generation'
-import { getNamesForColours } from './logic/utilities'
+import { getNamesForColors } from './logic/utilities'
 import chroma from 'chroma-js'
 
 export type SwatchData = {
     name: string
-    colour: chroma.Color
+    color: chroma.Color
     locked: boolean
 }
 
@@ -28,22 +28,22 @@ export const currentState = $state({
 export const appEvents = new AppEvents()
 
 export const refreshPalette = async () => {
-    const generatedColours = getRandomPalette(
+    const generatedColors = getRandomPalette(
         currentState.generationProperties.colorAmount,
     )
 
     const workingPalette: Array<SwatchData> = currentState.palette
 
-    const colourNames = await getNamesForColours(generatedColours)
+    const colorNames = await getNamesForColors(generatedColors)
 
-    for (let i = 0; i < generatedColours.length; i++) {
+    for (let i = 0; i < generatedColors.length; i++) {
         if (workingPalette[i] && workingPalette[i]?.locked) {
             continue
         }
 
         workingPalette[i] = {
-            name: colourNames[i],
-            colour: generatedColours[i],
+            name: colorNames[i],
+            color: generatedColors[i],
             locked: false,
         }
     }

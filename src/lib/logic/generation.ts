@@ -8,11 +8,11 @@ const MAX_LIGHTNESS = 1
 const MAX_CHROMA = 0.4 // this is not the most you can have but screens and all
 
 export const applyOKLCHPropertyShifts = (
-    colours: chroma.Color[],
+    colors: chroma.Color[],
     targetProperty: OKLCHProperty,
     shiftPercentage: number,
 ) => {
-    // Shifts every targetProperty of colours by shiftPercentage of MAX_<property>
+    // Shifts every targetProperty of colors by shiftPercentage of MAX_<property>
 
     let targetPropertyAsIndex, targetPropertyMaximumValue
 
@@ -39,13 +39,13 @@ export const applyOKLCHPropertyShifts = (
 
     const result: chroma.Color[] = []
     let i = 0
-    for (const colour of colours) {
-        const oklchColour = colour.oklch()
-        oklchColour[targetPropertyAsIndex] =
-            (oklchColour[targetPropertyAsIndex] + shiftPercentageAsUnits * i) %
+    for (const color of colors) {
+        const oklchColor = color.oklch()
+        oklchColor[targetPropertyAsIndex] =
+            (oklchColor[targetPropertyAsIndex] + shiftPercentageAsUnits * i) %
             targetPropertyMaximumValue
 
-        result.push(chroma(...oklchColour, 'oklch'))
+        result.push(chroma(...oklchColor, 'oklch'))
         i++
     }
 
@@ -53,11 +53,11 @@ export const applyOKLCHPropertyShifts = (
 }
 
 export const getComplementaryColorPalette = (
-    baseColour: chroma.Color,
+    baseColor: chroma.Color,
     hueDivisions: number,
 ) => {
     /*
-        generates complimentary colours!
+        generates complimentary colors!
 
         hueDivisions -> scheme type
             2 = complementary
@@ -68,7 +68,7 @@ export const getComplementaryColorPalette = (
 
     const increment = MAX_HUE / hueDivisions
 
-    const [baseLightness, baseChroma, _] = baseColour.oklch()
+    const [baseLightness, baseChroma, _] = baseColor.oklch()
 
     const palette: Array<chroma.Color> = []
 
@@ -82,7 +82,7 @@ export const getComplementaryColorPalette = (
 
 export const getShiftPalette = (
     property: OKLCHProperty,
-    baseColour: chroma.Color,
+    baseColor: chroma.Color,
     shiftPercentage: number, // percentage of max oklch shift
     shiftQuantity: number,
     // startingPoint: number = 0, // moves the base hue by changePerShift * n
@@ -90,7 +90,7 @@ export const getShiftPalette = (
     let palette: Array<chroma.Color> = []
 
     for (let i = 0; i < shiftQuantity; i++) {
-        palette.push(baseColour)
+        palette.push(baseColor)
     }
 
     palette = applyOKLCHPropertyShifts(palette, property, shiftPercentage)
@@ -98,7 +98,7 @@ export const getShiftPalette = (
     return palette
 }
 
-export const getRandomBaseColour = (): chroma.Color => {
+export const getRandomBaseColor = (): chroma.Color => {
     const doRandom = Math.random() < 0.1
     if (!doRandom) {
         return chroma(randomColor())
@@ -108,7 +108,7 @@ export const getRandomBaseColour = (): chroma.Color => {
 }
 
 export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
-    const baseColour = getRandomBaseColour()
+    const baseColor = getRandomBaseColor()
 
     const maxChangePerShift = 32
     const minChangePerShift = 26
@@ -120,7 +120,7 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
     const options = [
         () => {
             if (Math.random() < 0.2) {
-                return getComplementaryColorPalette(baseColour, colorAmount)
+                return getComplementaryColorPalette(baseColor, colorAmount)
             }
 
             const availableProperties: OKLCHProperty[] = [
@@ -148,7 +148,7 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
 
             return getShiftPalette(
                 chosenProperty,
-                baseColour,
+                baseColor,
                 changePerShift,
                 colorAmount,
             )
@@ -170,7 +170,7 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
 
 /*
     NOTES
-    chroma = intensity of the colour
+    chroma = intensity of the color
     hue = place in rainbow
     lightness = well, yeah
 */

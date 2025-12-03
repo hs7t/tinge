@@ -12,10 +12,10 @@
     <button
         class="action"
         onclick={() => {
-            let colourHEXCodes = currentState.palette.map((swatch) => {
-                return swatch.colour.hex()
+            let colorHEXCodes = currentState.palette.map((swatch) => {
+                return swatch.color.hex()
             })
-            navigator.clipboard.writeText(colourHEXCodes.join(', '))
+            navigator.clipboard.writeText(colorHEXCodes.join(', '))
         }}
     >
         Copy all
