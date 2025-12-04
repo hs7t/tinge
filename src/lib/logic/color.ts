@@ -44,11 +44,27 @@ export class Color {
         return result
     }
 
-    getPropertyStops = (property: PropertyID, stopQuantity: number) => {
+    getAbsolutePropertyStops = (property: PropertyID, stopQuantity: number) => {
         const propertyMaxValue = getMaxValue(property)
         const workingPropertyIndex = getPropertyIndex(property)
 
         const valuePerStop = propertyMaxValue / stopQuantity
+
+        const result = []
+        for (let i = 0; i < stopQuantity; i++) {
+            const altered = [...this.properties]
+            altered[workingPropertyIndex] = valuePerStop * i
+            result.push(altered)
+        }
+
+        return result
+    }
+
+    getPropertyStopsToMax = (property: PropertyID, stopQuantity: number) => {
+        const workingPropertyIndex = getPropertyIndex(property)
+        const targetValue = getMaxValue(property) - this.properties[workingPropertyIndex]
+
+        const valuePerStop = targetValue / stopQuantity
 
         const result = []
         for (let i = 0; i < stopQuantity; i++) {
