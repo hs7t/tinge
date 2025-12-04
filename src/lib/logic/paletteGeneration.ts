@@ -6,6 +6,15 @@ import type { OKLCHProperty } from './colorManipulation'
 import { MAX_HUE } from './colorManipulation'
 import { applyOKLCHPropertyShifts } from './colorManipulation'
 
+export const getRandomBaseColor = (): chroma.Color => {
+    const doRandom = Math.random() < 0.1
+    if (!doRandom) {
+        return chroma(randomColor())
+    } else {
+        return chroma.random()
+    }
+}
+
 export const getComplementaryColorPalette = (
     baseColor: chroma.Color,
     hueDivisions: number,
@@ -52,11 +61,9 @@ export const getShiftPalette = (
     return palette
 }
 
-export const getRandomBaseColor = (): chroma.Color => {
-    const doRandom = Math.random() < 0.1
-    if (!doRandom) {
-        return chroma(randomColor())
-    } else {
-        return chroma.random()
-    }
+export const getScalePalette = (
+    baseColors: Array<chroma.Color>,
+    colorAmount: number,
+) => {
+    return chroma.scale(baseColors).mode('oklch').colors(colorAmount)
 }
