@@ -76,13 +76,6 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
                             ],
                             colorAmount,
                         )
-                        const correctedColors = chroma
-                            .scale(palette)
-                            .correctLightness()
-                            .colors(colorAmount)
-                        palette = correctedColors.map((color) => {
-                            return chroma(color)
-                        })
                     }
                     break
             }
