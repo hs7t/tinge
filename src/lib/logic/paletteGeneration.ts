@@ -100,8 +100,11 @@ export const getScalePalette = (
     baseColors: Array<chroma.Color>,
     colorAmount: number,
 ): chroma.Color[] => {
-    let colors = []
-    for (let str of chroma.scale(baseColors).mode('oklch').colors(colorAmount)) {
+    const colors = []
+    for (const str of chroma
+        .scale(baseColors)
+        .mode('oklch')
+        .colors(colorAmount)) {
         colors.push(chroma(str))
     }
     return colors
