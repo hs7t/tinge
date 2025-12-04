@@ -48,17 +48,41 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
             const chosenMethod = methods[getRandomIndex(methods)]
             console.log(chosenMethod)
             let palette: Array<Color> = []
-    
+
             switch (chosenMethod) {
                 case 'scalar':
                     {
                         const baseColorB = getRandomBaseColor()
-                        const mixedBaseColor = chroma.mix(baseColor, baseColorB, 0.5, 'oklch')
-                        const mixedLightnessShifts = getColorShifts('lightness', mixedBaseColor, 10, 10)
+                        const mixedBaseColor = chroma.mix(
+                            baseColor,
+                            baseColorB,
+                            0.5,
+                            'oklch',
+                        )
+                        const mixedLightnessShifts = getColorShifts(
+                            'lightness',
+                            mixedBaseColor,
+                            10,
+                            10,
+                        )
 
-                        palette = getScalePalette([baseColor, mixedLightnessShifts[getRandomIndex(mixedLightnessShifts)], getRandomBaseColor()], colorAmount)
-                        const correctedScale = chroma.scale(palette).correctLightness()
-                        chroma(correctedScale) 
+                        palette = getScalePalette(
+                            [
+                                baseColor,
+                                mixedLightnessShifts[
+                                    getRandomIndex(mixedLightnessShifts)
+                                ],
+                                getRandomBaseColor(),
+                            ],
+                            colorAmount,
+                        )
+                        const correctedColors = chroma
+                            .scale(palette)
+                            .correctLightness()
+                            .colors(colorAmount)
+                        palette = correctedColors.map((color) => {
+                            return chroma(color)
+                        })
                     }
                     break
             }
