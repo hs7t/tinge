@@ -9,11 +9,12 @@ export type Chroma = number
 export type Hue = number
 
 export type PropertyID = 'hue' | 'lightness' | 'chroma'
+export type Properties = [Lightness, Chroma, Hue]
 
 export class Color {
-    properties: [Lightness, Chroma, Hue]
+    properties: Properties
 
-    constructor(properties: [Lightness, Chroma, Hue]) {
+    constructor(properties: Properties) {
         this.properties = properties
     }
 
@@ -52,9 +53,9 @@ export class Color {
 
         const result = []
         for (let i = 0; i < stopQuantity; i++) {
-            const altered = [...this.properties]
-            altered[workingPropertyIndex] = valuePerStop * i
-            result.push(altered)
+            const alteredProperties = [...this.properties] as Properties
+            alteredProperties[workingPropertyIndex] = valuePerStop * i
+            result.push(new Color(alteredProperties))
         }
 
         return result
@@ -68,9 +69,9 @@ export class Color {
 
         const result = []
         for (let i = 0; i < stopQuantity; i++) {
-            const altered = [...this.properties]
-            altered[workingPropertyIndex] = valuePerStop * i
-            result.push(altered)
+            const alteredProperties = [...this.properties] as Properties
+            alteredProperties[workingPropertyIndex] = valuePerStop * i
+            result.push(new Color(alteredProperties))
         }
 
         return result
