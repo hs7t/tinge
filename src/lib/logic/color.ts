@@ -1,8 +1,14 @@
 import chroma from 'chroma-js'
 
+export const MAX_LIGHTNESS = 1
+export const MAX_HUE = 360
+export const MAX_CHROMA = 0.4 // this is not the most you can have but screens and all
+
 export type Lightness = number
 export type Chroma = number
 export type Hue = number
+
+export type PropertyID = 'hue' | 'lightness' | 'chroma'
 
 export class Color {
     properties: [Lightness, Chroma, Hue]
@@ -37,4 +43,47 @@ export class Color {
 
         return result
     }
+
+    propertyStops = (property: PropertyID, stopQuantity: number) => {
+        const propertyMaxValue = getMaxValue(property)
+        const workingPropertyIndex = getPropertyIndex(property)
+
+        const valuePerStop = propertyMaxValue / stopQuantity
+
+        const result = []
+        for (let i = 0; i < stopQuantity; i++) {
+            const altered = [...this.properties]
+            altered[workingPropertyIndex] = valuePerStop * i
+            result.push(altered)
+        }
+
+        return result
+    }
+}
+
+function getMaxValue(property: PropertyID): number {
+    switch (property) {
+        case 'hue':
+            return MAX_HUE
+        case 'lightness':
+            return MAX_LIGHTNESS
+        case 'chroma':
+            return MAX_CHROMA
+    }
+}
+
+function getPropertyIndex(property: PropertyID): number {
+    let workingPropertyIndex
+    switch (property) {
+        case 'lightness':
+            workingPropertyIndex = 0
+            break
+        case 'chroma':
+            workingPropertyIndex = 1
+            break
+        case 'hue':
+            workingPropertyIndex = 2
+            break
+    }
+    return workingPropertyIndex
 }
