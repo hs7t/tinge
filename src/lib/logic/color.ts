@@ -61,6 +61,14 @@ export class Color {
     }
 }
 
+export type Palette = Array<Color>
+
+export const getPaletteFromCJSScale = (scale: chroma.Scale, colorAmount: number) => {
+    const hexCodes = scale.colors(colorAmount)
+    const palette = hexCodes.map((code) => { chroma(code) })
+    return palette
+}
+
 function getMaxValue(property: PropertyID): number {
     switch (property) {
         case 'hue':
