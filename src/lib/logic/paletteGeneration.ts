@@ -5,6 +5,16 @@ import type { OKLCHProperty } from './colorManipulation'
 
 import { MAX_HUE } from './colorManipulation'
 import { applyOKLCHPropertyShifts } from './colorManipulation'
+import { getRandomIndex } from './utilities'
+
+export const getRandomBaseColor = (): chroma.Color => {
+    const doRandom = Math.random() < 0.1
+    if (!doRandom) {
+        return chroma(randomColor())
+    } else {
+        return chroma.random()
+    }
+}
 
 export const getComplementaryColorPalette = (
     baseColor: chroma.Color,
@@ -34,7 +44,7 @@ export const getComplementaryColorPalette = (
     return palette
 }
 
-export const getShiftPalette = (
+export const getColorShifts = (
     property: OKLCHProperty,
     baseColor: chroma.Color,
     shiftPercentage: number, // percentage of max oklch shift
@@ -52,11 +62,50 @@ export const getShiftPalette = (
     return palette
 }
 
-export const getRandomBaseColor = (): chroma.Color => {
-    const doRandom = Math.random() < 0.1
-    if (!doRandom) {
-        return chroma(randomColor())
-    } else {
-        return chroma.random()
+export const fillPalette = (
+    palette: Array<chroma.Color>,
+    colorAmountTarget: number,
+) => {
+    const colorLightnessShifts = []
+    for (const color of palette) {
+        colorLightnessShifts.push(
+            getColorShifts(
+                'lightness',
+                color,
+                100 / colorAmountTarget, // 100 as in 100%
+                colorAmountTarget,
+            ),
+        )
     }
+
+    while (
+        palette.length - 1 > colorAmountTarget &&
+        colorLightnessShifts.length < 0
+    ) {
+        const randomIndex = getRandomIndex(colorLightnessShifts)
+        const workingItem = colorLightnessShifts[randomIndex]
+        colorLightnessShifts.splice(randomIndex, 1)
+
+        palette.push(workingItem[1])
+    }
+
+    let i = 0
+    while (palette.length < colorAmountTarget) {
+        palette.push(palette[i - (i % palette.length)])
+        i++
+    }
+}
+
+export const getScalePalette = (
+    baseColors: Array<chroma.Color>,
+    colorAmount: number,
+): chroma.Color[] => {
+    const colors = []
+    for (const str of chroma
+        .scale(baseColors)
+        .mode('oklch')
+        .colors(colorAmount)) {
+        colors.push(chroma(str))
+    }
+    return colors
 }

@@ -1,10 +1,11 @@
-import chroma from 'chroma-js'
+import chroma, { type Color } from 'chroma-js'
 import type { OKLCHProperty } from './colorManipulation'
 import {
     getRandomBaseColor,
-    getComplementaryColorPalette,
-    getShiftPalette,
+    getColorShifts,
+    getScalePalette,
 } from './paletteGeneration'
+import { getRandomIndex } from './utilities'
 
 export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
     const baseColor = getRandomBaseColor()
@@ -18,24 +19,14 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
 
     const options = [
         () => {
-            if (Math.random() < 0.2) {
-                return getComplementaryColorPalette(baseColor, colorAmount)
-            }
-
             const availableProperties: OKLCHProperty[] = [
                 'lightness',
                 'chroma',
                 'hue',
             ]
-            const availablePropertiesLastIndex = availableProperties.length - 1
 
-            let randomIndex = Math.round(
-                Math.random() * availablePropertiesLastIndex,
-            )
-            if (randomIndex > availablePropertiesLastIndex)
-                randomIndex = availablePropertiesLastIndex
-
-            const chosenProperty = availableProperties[randomIndex]
+            const chosenProperty =
+                availableProperties[getRandomIndex(availableProperties)]
             console.log(chosenProperty)
 
             if (chosenProperty == 'hue') {
@@ -45,12 +36,50 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
                 changePerShift /= Math.floor(Math.random() * 2 - 1)
             }
 
-            return getShiftPalette(
+            return getColorShifts(
                 chosenProperty,
                 baseColor,
                 changePerShift,
                 colorAmount,
             )
+        },
+        () => {
+            const methods = ['scalar']
+            const chosenMethod = methods[getRandomIndex(methods)]
+            console.log(chosenMethod)
+            let palette: Array<Color> = []
+
+            switch (chosenMethod) {
+                case 'scalar':
+                    {
+                        const baseColorB = getRandomBaseColor()
+                        const mixedBaseColor = chroma.mix(
+                            baseColor,
+                            baseColorB,
+                            0.5,
+                            'oklch',
+                        )
+                        const mixedLightnessShifts = getColorShifts(
+                            'lightness',
+                            mixedBaseColor,
+                            10,
+                            10,
+                        )
+
+                        palette = getScalePalette(
+                            [
+                                baseColor,
+                                mixedLightnessShifts[
+                                    getRandomIndex(mixedLightnessShifts)
+                                ],
+                                getRandomBaseColor(),
+                            ],
+                            colorAmount,
+                        )
+                    }
+                    break
+            }
+            return palette
         },
     ]
 
