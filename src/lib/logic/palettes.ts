@@ -33,7 +33,7 @@ export const generateBlendScalarPalette = (
 // Clustered palette (ex analogous)
 // Poligonic (ex triadic, tetradic...)
 
-export const generatePoligonicPalette = (
+export const generateClusteredPalette = (
     colorAmount: number,
     baseColor: Color,
     points: number,
@@ -41,30 +41,68 @@ export const generatePoligonicPalette = (
     let palette = baseColor.withNeighbouringHues(points, true)
 
     if (palette.length < colorAmount) {
-        palette = fitPaletteToLength(colorAmount, palette)
+        const chromaJSPaletteColors = palette.map((color) => {
+            return color.asChromaJS()
+        })
+        palette = getPaletteFromCJSScale(
+            chroma.scale(chromaJSPaletteColors),
+            colorAmount,
+        )
     }
-    
+
     return palette
 }
 
-function fitPaletteToLength(targetLength: number, palette: Palette): Palette {
-    if (palette.length > targetLength) {
-        return palette.splice(targetLength - 1)
+export const generatePoligonicPalette = (
+    colorAmount: number,
+    baseColor: Color,
+    points: number,
+) => {
+    const hues = baseColor.withPropertyPoligons('hue', points)
+    let palette: Palette = hues
+    if (hues.length != colorAmount) {
+        palette = fitPaletteToLengthWithScale(colorAmount, palette)
     }
 
-    const availableColors = structuredClone(palette)
-    while (palette.length < targetLength) {
-        const workingColorIndex = getRandomIndex(availableColors)
-        const workingColor = availableColors[workingColorIndex]
-        availableColors.splice(workingColorIndex, 1)
+    return palette
+}
 
-        const lightnessStops = workingColor.getPropertyStopsToMax(
-            'lightness',
-            targetLength,
-        )
-        const fillColor = lightnessStops[getRandomIndex(lightnessStops)]
-        palette.push(fillColor)
-    }
+// function fitPaletteToLengthWithShades(
+//     targetLength: number,
+//     palette: Palette,
+// ): Palette {
+//     if (palette.length > targetLength) {
+//         return palette.splice(targetLength - 1)
+//     }
+
+//     const availableColors = structuredClone(palette)
+//     while (palette.length < targetLength) {
+//         const workingColorIndex = getRandomIndex(availableColors)
+//         const workingColor = availableColors[workingColorIndex]
+//         availableColors.splice(workingColorIndex, 1)
+
+//         const lightnessStops = workingColor.getPropertyStopsToMax(
+//             'lightness',
+//             targetLength,
+//         )
+//         const fillColor = lightnessStops[getRandomIndex(lightnessStops)]
+//         palette.push(fillColor)
+//     }
+
+//     return palette
+// }
+
+function fitPaletteToLengthWithScale(
+    targetLength: number,
+    palette: Palette,
+): Palette {
+    const chromaJSPaletteColors = palette.map((color) => {
+        return color.asChromaJS()
+    })
+    palette = getPaletteFromCJSScale(
+        chroma.scale(chromaJSPaletteColors),
+        targetLength,
+    )
 
     return palette
 }
