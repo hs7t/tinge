@@ -26,26 +26,29 @@ export class Color {
         amount: number,
         center: boolean = false,
         degreeChangePerStep = 30,
-    ) => {
+    ): Palette => {
         let offset = 0
         if (center == true) {
             offset = Math.floor(amount / 2)
         }
 
-        const baseHue = this.properties[2]
+        const [baseLightness, baseChroma, baseHue] = this.properties
         const startingHue = baseHue - degreeChangePerStep * offset
 
         const result = []
 
         for (let i = 0; i < amount - 1; i++) {
             const hue = startingHue + degreeChangePerStep * i
-            result.push(hue)
+            result.push(new Color([baseLightness, baseChroma, hue]))
         }
 
         return result
     }
 
-    getAbsolutePropertyStops = (property: PropertyID, stopQuantity: number) => {
+    getAbsolutePropertyStops = (
+        property: PropertyID,
+        stopQuantity: number,
+    ): Palette => {
         const propertyMaxValue = getMaxValue(property)
         const workingPropertyIndex = getPropertyIndex(property)
 
@@ -63,7 +66,8 @@ export class Color {
 
     getPropertyStopsToMax = (property: PropertyID, stopQuantity: number) => {
         const workingPropertyIndex = getPropertyIndex(property)
-        const targetValue = getMaxValue(property) - this.properties[workingPropertyIndex]
+        const targetValue =
+            getMaxValue(property) - this.properties[workingPropertyIndex]
 
         const valuePerStop = targetValue / stopQuantity
 
@@ -80,17 +84,25 @@ export class Color {
 
 export type Palette = Array<Color>
 
-export const getPaletteFromCJSScale = (scale: chroma.Scale, colorAmount: number): Palette => {
+export const getPaletteFromCJSScale = (
+    scale: chroma.Scale,
+    colorAmount: number,
+): Palette => {
     const hexCodes = scale.colors(colorAmount)
     const palette = hexCodes.map((code) => {
         const properties = chroma(code).oklch() as Properties
-        return new Color(properties) 
+        return new Color(properties)
     })
     return palette
 }
 
 export const blendColors = (colorA: Color, colorB: Color): Color => {
-    const result = chroma.mix(colorA.asChromaJS(), colorB.asChromaJS(), 0.5, 'oklch')
+    const result = chroma.mix(
+        colorA.asChromaJS(),
+        colorB.asChromaJS(),
+        0.5,
+        'oklch',
+    )
     return new Color([...result.oklch()])
 }
 
