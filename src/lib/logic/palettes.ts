@@ -12,3 +12,9 @@ export const generateBlendScalarPalette = (colorAmount: number, baseColorA: Colo
 
     return colors
 }
+
+
+// Clustered palette (ex analogous)
+// Poligonic (ex triadic, tetradic...)
+
+export const generatePoligonicPalette
