@@ -45,6 +45,22 @@ export class Color {
         return result
     }
 
+    withPropertyPoligons = (property: PropertyID, points: number) => {
+        const workingPropertyIndex = getPropertyIndex(property)
+        const growth = getMaxValue(property) / points
+        const result = []
+
+        for (let i = 0; i < points; i++) {
+            const workingColor = [...this.properties] as Properties
+            workingColor[workingPropertyIndex] =
+                (workingColor[workingPropertyIndex] + growth * i) %
+                getMaxValue(property)
+            result.push(workingColor)
+        }
+
+        return result
+    }
+
     getAbsolutePropertyStops = (
         property: PropertyID,
         stopQuantity: number,
