@@ -4,6 +4,7 @@ import {
     Color,
     getPaletteFromCJSScale,
     type Palette,
+    type PropertyID,
 } from './color'
 import { getRandomIndex } from './utilities'
 
@@ -57,6 +58,20 @@ export const generatePoligonicPalette = (
         palette = fitPaletteToLengthWithScale(colorAmount, palette)
     }
 
+    return palette
+}
+
+export const generateLightnessShiftPalette = (
+    colorAmount: number,
+    baseColor: Color,
+    steps: number
+) => {
+    const property: PropertyID = 'lightness'
+
+    let palette = baseColor.withPropertyPoligons(property, steps)
+    if (palette.length != colorAmount) {
+        palette = fitPaletteToLengthWithScale(colorAmount, palette)
+    }
     return palette
 }
 
