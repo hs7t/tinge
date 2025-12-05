@@ -1,5 +1,30 @@
-<script>
+<script lang="ts">
+    import { browser } from '$app/environment'
     import { refreshPalette } from '$lib/shared.svelte'
+    import { onMount, onDestroy } from 'svelte'
+
+    let shortcutEventListener: [string, (e: KeyboardEvent) => void] = [
+        'keydown',
+        (e) => {
+            if (e.key == 'E' && e.shiftKey && e.altKey) {
+                refreshPalette()
+            }
+        },
+    ]
+
+    if (browser) {
+        onMount(() => {
+            // @ts-expect-error I don't have time to think about this
+            document.removeEventListener(...shortcutEventListener)
+            // @ts-expect-error yup
+            document.addEventListener(...shortcutEventListener)
+        })
+
+        onDestroy(() => {
+            // @ts-expect-error yup
+            document.removeEventListener(...shortcutEventListener)
+        })
+    }
 </script>
 
 <div class="generation-pane">
