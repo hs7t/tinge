@@ -15,29 +15,70 @@ A tiny tool for generating harmonious colour palettes! Features:
 
 ## Tech used
 -   [chroma.js](https://gka.github.io/chroma.js/)!!! and 
-    [RandomColor](https://github.com/davidmerfield/randomColor) (sometimes)
--   [color-names](https://github.com/meodai/color-names)
+    [RandomColor](https://github.com/davidmerfield/randomColor)
+-   [color-names](https://github.com/meodai/color-names) (and its API!)
 -   [ky](https://github.com/sindresorhus/ky)
 -   [Vite](https://vite.dev/) and [SvelteKit](https://svelte.dev/) (+ adapter-static)
 -   [Prettier](https://prettier.io/), [ESLint](https://eslint.org) and 
     [TypeScript](https://typescriptlang.org/)
 
+## How it works
+
+It's pretty simple! Generation starts with getting a nice base colour using the
+baseColor library.
+
+These colours are stored in neat Color classes ([`color.ts`](/src/lib/logic/color.ts))
+that have various methods useful for arriving at palettes using various principles
+of simple [color harmony](https://en.wikipedia.org/wiki/Harmony_(color)).
+
+For example, `Color.withNeighbouringHues()` can be used to create 
+[analogous](https://en.wikipedia.org/wiki/Analogous_colors) colour schemes, 
+by doing something like this:
+
+```TypeScript
+// Color.withNeighbouringHues(color amount, center?, degree separation)
+const analog: Palette = baseColor.withNeighbouringHues(3, true, 30) // analogous colour scheme with baseColor at the center
+```
+
+There's also the nifty `Color.withPropertyPoligons()` that can be used
+to create [color polygon](https://en.wikipedia.org/wiki/Harmony_(color)#Color_polygons)
+(triadic, tetradic, pentagonic...) colour schemes:
+
+```TypeScript
+// Color.withPropertyPoligons(property: 'lightness'|'chroma'|'hue', point quantity)
+const triadic: Palette = baseColor.withPropertyPoligons('hue', 3)
+const tetradic: Palette = baseColor.withPropertyPoligons('hue', 4)
+```
+
+You can turn these base colour schemes into a [chroma.js](https://gka.github.io/chroma.js/)
+scale (a gradient, basically), from which you can get as many stops as you want
+to get a nice, pleasing palette!
+
+I also use something I call the *blend scalar* method, which is quite basic and my favorite.
+Basically:
+
+1. Get two random base colours (let's call them `baseA` and `baseB`)
+2. Mix `baseA` and `baseB` to get `mixed`
+3. Get a random lightness shift of `mixed` (`middle`)
+4. Create a scale
+5. Profit!
+
 ## Running this yourself
 
-Don't. But if you really want to:
+1. Consider: do you like spaghetti this much?
 
-1.  Clone this repo, and install all the necessary dependencies:
+2.  Clone this repo, and install all the necessary dependencies:
     ```bash
     $ git clone https://github.com/hs7t/hviicc.git
     $ npm i
     ```
-2.  Run a development server:
+3.  Run a development server:
 
     ```bash
     $ npm run dev
     ```
 
-3.  Get a build when you're ready:
+4.  Get a build when you're ready:
     ```bash
     npm run build   # check out ./dist afterward!
     ```
