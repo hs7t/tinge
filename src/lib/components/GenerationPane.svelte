@@ -6,7 +6,8 @@
     let shortcutEventListener: [string, (e: KeyboardEvent) => void] = [
         'keydown',
         (e) => {
-            if (e.key == 'E' && e.shiftKey && e.altKey) {
+            if (e.key == 'E' && e.shiftKey && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault()
                 refreshPalette()
             }
         },
@@ -31,7 +32,7 @@
     <div class="buttonContainer">
         <button onclick={() => refreshPalette()}>Generate</button>
         <p class="hint">
-            <code>SHIFT</code> <code>ALT</code> <code>E</code>
+            <code>Ctrl/⌘</code> <code>Shift</code> <code>E</code>
         </p>
     </div>
 </div>
